@@ -1,0 +1,31 @@
+{{define "content"}}
+<h1>Favoris</h1>
+
+{{if not .Artists}}
+  <p class="muted">Aucun favori pour l’instant. Tu peux aller en ajouter.</p>
+{{end}}
+
+<div class="grid">
+  {{range .Artists}}
+    <div class="card">
+      <a class="card-link" href="/films/{{.ID}}">
+        <img class="cover" src="{{.Image}}" alt="{{.Name}}" />
+      </a>
+      <div class="card-body">
+        <div class="title-row">
+          <h3>{{.Name}}</h3>
+          <span class="badge">{{.CreationDate}}</span>
+        </div>
+        <p class="muted">First album: {{.FirstAlbum}}</p>
+
+        <form method="POST" action="/favorites/toggle">
+          <input type="hidden" name="id" value="{{.ID}}">
+          <button class="btn danger" type="submit">Retirer</button>
+        </form>
+      </div>
+    </div>
+  {{end}}
+</div>
+{{end}}
+
+{{template "base" .}}

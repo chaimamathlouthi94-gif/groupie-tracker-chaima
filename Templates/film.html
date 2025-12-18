@@ -1,0 +1,30 @@
+{{define "content"}}
+<a class="back" href="/films">← Retour</a>
+
+<div class="detail">
+  <img class="detail-cover" src="{{.Artist.Image}}" alt="{{.Artist.Name}}" />
+
+  <div class="detail-info">
+    <h1>{{.Artist.Name}}</h1>
+    <p class="muted">Créé en {{.Artist.CreationDate}} · First album {{.Artist.FirstAlbum}}</p>
+
+    <h3>Membres</h3>
+    <ul>
+      {{range .Artist.Members}}
+        <li>{{.}}</li>
+      {{end}}
+    </ul>
+
+    <form method="POST" action="/favorites/toggle">
+      <input type="hidden" name="id" value="{{.Artist.ID}}">
+      {{if .IsFav}}
+        <button class="btn danger" type="submit">Retirer des favoris</button>
+      {{else}}
+        <button class="btn" type="submit">Ajouter aux favoris</button>
+      {{end}}
+    </form>
+  </div>
+</div>
+{{end}}
+
+{{template "base" .}}

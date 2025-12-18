@@ -1,0 +1,53 @@
+{{define "content"}}
+<h1>Artists</h1>
+<p class="muted">Liste depuis l’API Groupie Tracker.</p>
+
+<div class="toolbar">
+  <div class="limits">
+    <span>Par page :</span>
+    <a class="{{if eq .Limit 10}}active{{end}}" href="/films?page=1&limit=10">10</a>
+    <a class="{{if eq .Limit 20}}active{{end}}" href="/films?page=1&limit=20">20</a>
+    <a class="{{if eq .Limit 30}}active{{end}}" href="/films?page=1&limit=30">30</a>
+  </div>
+
+  <div class="pager">
+    <a href="/films?page={{.PrevPage}}&limit={{.Limit}}">◀</a>
+    <span>Page {{.Page}} / {{.TotalPages}}</span>
+    <a href="/films?page={{.NextPage}}&limit={{.Limit}}">▶</a>
+  </div>
+</div>
+
+<div class="grid">
+  {{range .Artists}}
+    <div class="card">
+      <a class="card-link" href="/films/{{.ID}}">
+        <img class="cover" src="{{.Image}}" alt="{{.Name}}" />
+      </a>
+      <div class="card-body">
+        <div class="title-row">
+          <h3>{{.Name}}</h3>
+          <span class="badge">{{.CreationDate}}</span>
+        </div>
+        <p class="muted">First album: {{.FirstAlbum}}</p>
+
+        <form method="POST" action="/favorites/toggle">
+          <input type="hidden" name="id" value="{{.ID}}">
+          {{if (IsFavorite $.Favs (printf "%d" .ID))}}
+            <button class="btn danger" type="submit">Retirer des favoris</button>
+          {{else}}
+            <button class="btn" type="submit">Ajouter aux favoris</button>
+          {{end}}
+        </form>
+      </div>
+    </div>
+  {{end}}
+</div>
+
+<div class="pager bottom">
+  <a href="/films?page={{.PrevPage}}&limit={{.Limit}}">◀ Précédent</a>
+  <span>Page {{.Page}} / {{.TotalPages}}</span>
+  <a href="/films?page={{.NextPage}}&limit={{.Limit}}">Suivant ▶</a>
+</div>
+{{end}}
+
+{{template "base" .}}
